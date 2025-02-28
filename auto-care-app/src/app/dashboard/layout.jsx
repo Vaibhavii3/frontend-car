@@ -1,52 +1,36 @@
 "use client";
-import { useState } from "react";
-import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLayout({ children }) {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+    }
+  }, [router]);
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className={`w-64 bg-gray-900 text-white p-5 ${menuOpen ? "block" : "hidden"} md:block`}>
-        <h2 className="text-xl font-bold">Admin Dashboard</h2>
-        <nav className="mt-5">
+      <aside className="w-64 bg-gray-800 text-white p-5">
+        <h2 className="text-xl font-bold mb-4">CarCare Dashboard</h2>
+        <nav>
           <ul>
-            <li className="py-2 px-4 rounded hover:bg-gray-700">
-              <Link href="/dashboard">Dashboard</Link>
-            </li>
-            <li className="py-2 px-4 rounded hover:bg-gray-700">
-              <Link href="/dashboard/users">Users</Link>
-            </li>
-            <li className="py-2 px-4 rounded hover:bg-gray-700">
-              <Link href="/dashboard/services">Services</Link>
-            </li>
-            <li className="py-2 px-4 rounded hover:bg-gray-700">
-              <Link href="/dashboard/orders">Orders</Link>
-            </li>
-            <li className="py-2 px-4 rounded hover:bg-gray-700">
-              <Link href="/dashboard/payments">Payments</Link>
-            </li>
-            <li className="py-2 px-4 rounded hover:bg-gray-700">
-              <Link href="/dashboard/analytics">Reports</Link>
-            </li>
-            <li className="py-2 px-4 rounded hover:bg-gray-700">
-              <Link href="/dashboard/settings">Settings</Link>
-            </li>
+            <li className="mb-2"><a href="/dashboard" className="hover:underline">Home</a></li>
+            <li className="mb-2"><a href="/dashboard/services" className="hover:underline">Services</a></li>
+            <li className="mb-2"><a href="/dashboard/booking" className="hover:underline">Booking</a></li>
+            <li className="mb-2"><a href="/dashboard/payment" className="hover:underline">Payment</a></li>
+            <li className="mb-2"><a href="/dashboard/confirmation" className="hover:underline">Confirmation</a></li>
+            <li className="mb-2"><a href="/dashboard/tracking" className="hover:underline">Tracking</a></li>
+            <li className="mb-2"><a href="/dashboard/review" className="hover:underline">Review</a></li>
           </ul>
         </nav>
       </aside>
-
       {/* Main Content */}
-      <main className="flex-1 p-5">
-        <header className="mb-5 bg-white shadow p-4 rounded flex justify-between">
-          <h1 className="text-xl font-semibold">Admin Dashboard</h1>
-          <button className="md:hidden p-2 bg-gray-700 text-white rounded" onClick={() => setMenuOpen(!menuOpen)}>
-            ☰
-          </button>
-        </header>
-        {children}
-      </main>
+      <main className="flex-1 p-5">{children}</main>
     </div>
   );
 }
